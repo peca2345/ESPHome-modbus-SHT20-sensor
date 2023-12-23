@@ -8,6 +8,71 @@
 
 ## Postup:
 
+
+## ESPHome yaml
+```
+esphome:
+  name: test
+  friendly_name: modbus
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+logger:
+api:
+  encryption:
+    key: "zde_napius_vlastni_key_co_ti_vygeneroval_esphome_po_pridani_zaruizeni"
+ota:
+  password: "zde_napius_vlastni_key_co_ti_vygeneroval_esphome_po_pridani_zaruizeni"
+ wifi:
+   ssid: !secret wifi_ssid
+   password: !secret wifi_password
+   ap:
+     ssid: "Teresov-A8M Fallback Hotspot"
+     password: "m0gfMavNAM9d"  
+ captive_portal:
+##############################################
+
+modbus:
+  send_wait_time: 200ms
+  id: rs485
+
+modbus_controller:
+  - id: sht20_1 # senzor sht20 s adresou 1 (0x01) - defaultni
+    address: 1
+    modbus_id: rs485
+    update_interval: 5s
+  - id: sht20_4 # senzor sht20 s adresou 4 (0x04) - zmenil jsem u druheho z 1 na 4 (navod na konci)
+    address: 0x04
+    modbus_id: rs485
+    update_interval: 5s
+
+sensor:
+## SHT20 - 1  
+  - platform: modbus_controller
+    modbus_controller_id: sht20_1 # (zde musis dat id tve kontroleru aby esphome vedel kde se ma dotazovat)
+    name: "ter_sht1_temp"
+    address: 1  # sub adresa registru pro teplotu (zjisteno z datasheetu)
+    unit_of_measurement: "°C"
+    register_type: read 
+    value_type: U_WORD  # 16bitové neznaménkové celé číslo
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1  
+      - offset: -2.0  # kalibrace
+  - platform: modbus_controller
+    modbus_controller_id: sht20_1 # (zde musis dat id tve kontroleru aby esphome vedel kde se ma dotazovat)
+    name: "ter_sht1_hum"
+    address: 2  # subadresa registru pro vlhkost (zjisteno z datasheetu)
+    unit_of_measurement: "%"
+    register_type: read  
+    value_type: U_WORD  # 16bitové neznaménkové celé číslo
+    accuracy_decimals: 1
+    filters:
+      - multiply: 0.1  
+      - offset: 0.0  # kalibrace
+```
+
 ## ESPHome yaml - změna modbus adresy senzoru:
 ```
 esphome:
