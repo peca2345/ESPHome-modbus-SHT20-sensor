@@ -1,13 +1,5 @@
 # ESPHome modbus SHT20 Temp & Hum sensor
 
-## Popis:
-
-## Info:
-
-## Komponenty:
-
-## Postup:
-
 
 ## ESPHome yaml
 ```
@@ -28,7 +20,7 @@ ota:
    ssid: !secret wifi_ssid
    password: !secret wifi_password
    ap:
-     ssid: "Teresov-A8M Fallback Hotspot"
+     ssid: "A8M Fallback Hotspot"
      password: "m0gfMavNAM9d"  
  captive_portal:
 ##############################################
